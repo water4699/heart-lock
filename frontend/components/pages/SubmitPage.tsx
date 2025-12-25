@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { useAccount, useWalletClient } from "wagmi";
 import { motion } from "framer-motion";
-import { ScrollText, Lock, CheckCircle2, FileCheck } from "lucide-react";
+import { Lock, CheckCircle2, FileCheck } from "lucide-react";
 import { useFhevm } from "@/fhevm/useFhevm";
 import { EncryptedPeerReviewABI } from "@/abi/EncryptedPeerReviewABI";
 import { EncryptedPeerReviewAddresses } from "@/abi/EncryptedPeerReviewAddresses";

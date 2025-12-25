@@ -45,7 +45,6 @@ async function buildSigner(
   walletClient: unknown,
   fallbackChainId?: number,
   connectionAttempts: number = 0,
-  lastErrorTime: number | null = null,
 ): Promise<{ provider: ethers.BrowserProvider; signer: ethers.JsonRpcSigner } | undefined> {
   if (!walletClient) {
     return undefined;
@@ -97,7 +96,7 @@ async function buildSigner(
       await new Promise(resolve => setTimeout(resolve, retryDelay));
 
       // Recursively retry with incremented attempt counter
-      return buildSigner(walletClient, fallbackChainId, connectionAttempts + 1, Date.now());
+      return buildSigner(walletClient, fallbackChainId, connectionAttempts + 1);
     }
 
     // Max retries exceeded, return undefined to indicate failure
@@ -116,14 +115,13 @@ async function buildSigner(
  * - Wallet connection management with automatic retry
  * - Secure decryption of personal and team metrics
  */
-export const PeerReviewDashboard = React.memo(() => {
+const PeerReviewDashboardComponent = () => {
   const { storage: fhevmDecryptionSignatureStorage } = useInMemoryStorage();
   const { address, isConnected, chainId } = useAccount();
   const { data: walletClient } = useWalletClient();
 
   // State variables must be declared before useEffect that uses them
   const [connectionAttempts, setConnectionAttempts] = useState(0);
-  const [lastErrorTime, setLastErrorTime] = useState<number | null>(null);
   const [retryTimeout, setRetryTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const [{ signer, provider }, setWalletBindings] = useState<{
@@ -146,13 +144,11 @@ export const PeerReviewDashboard = React.memo(() => {
             console.log('Wallet connection successful, updating bindings');
             setWalletBindings({ signer: result.signer, provider: result.provider });
             setConnectionAttempts(0); // Reset on success
-            setLastErrorTime(null); // Clear error time on success
           } else {
             // Failure: Clear bindings and track error state
             console.log('Wallet connection failed, clearing bindings');
             setWalletBindings({ signer: undefined, provider: undefined });
             setConnectionAttempts(prev => prev + 1);
-            setLastErrorTime(Date.now());
           }
         }
 
@@ -170,7 +166,6 @@ export const PeerReviewDashboard = React.memo(() => {
           // On error, clear bindings and track failure state
           setWalletBindings({ signer: undefined, provider: undefined });
           setConnectionAttempts(prev => prev + 1);
-          setLastErrorTime(Date.now());
         }
       }
     };
@@ -183,7 +178,7 @@ export const PeerReviewDashboard = React.memo(() => {
         clearTimeout(retryTimeout);
       }
     };
-  }, [walletClient, chainId, connectionAttempts, lastErrorTime, retryTimeout]);
+  }, [walletClient, chainId, connectionAttempts, retryTimeout]);
 
   const fhevmProvider = walletClient?.transport ?? (isConnected ? undefined : HARDHAT_RPC_URL);
   const {
@@ -232,7 +227,6 @@ export const PeerReviewDashboard = React.memo(() => {
   const [managerAddress, setManagerAddress] = useState<string | undefined>(undefined);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [scoreInput, setScoreInput] = useState<number>(70);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [myScore, setMyScore] = useState<bigint | null>(null);
   const [teamAverage, setTeamAverage] = useState<bigint | null>(null);
   const [message, setMessage] = useState<string>("");
@@ -240,7 +234,6 @@ export const PeerReviewDashboard = React.memo(() => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDecrypting, setIsDecrypting] = useState(false);
   const [isAverageLoading, setIsAverageLoading] = useState(false);
-  const [lastActivity, setLastActivity] = useState<number>(Date.now());
 
   const isManager = useMemo(() => {
     if (!managerAddress || !address) {
@@ -627,8 +620,11 @@ export const PeerReviewDashboard = React.memo(() => {
       </footer>
     </section>
   );
-});
+};
 
+PeerReviewDashboardComponent.displayName = "PeerReviewDashboard";
+
+export const PeerReviewDashboard = React.memo(PeerReviewDashboardComponent);
 
 // Commit marker: add_ui - 2025-11-03T11:30:00-08:00
 

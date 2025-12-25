@@ -45,8 +45,8 @@ const connectors = connectorsForWallets(
 // Suppress WalletConnect analytics warnings for localhost
 if (typeof window !== "undefined" && window.location.hostname === "localhost") {
   const originalError = console.error;
-  console.error = (...args: any[]) => {
-    if (args[0]?.includes?.("not found on Allowlist") || args[0]?.includes?.("cloud.reown.com")) {
+  console.error = (...args: unknown[]) => {
+    if (typeof args[0] === "string" && (args[0].includes("not found on Allowlist") || args[0].includes("cloud.reown.com"))) {
       return; // Suppress WalletConnect allowlist warnings
     }
     originalError.apply(console, args);

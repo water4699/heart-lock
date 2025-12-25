@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { useAccount, useWalletClient } from "wagmi";
 import { motion } from "framer-motion";
@@ -33,11 +33,9 @@ function getContractByChainId(chainId: number | undefined) {
 export const DashboardPage = () => {
   const { address, isConnected, chainId } = useAccount();
   const { data: walletClient } = useWalletClient();
-  const { storage: fhevmDecryptionSignatureStorage } = useInMemoryStorage();
 
   const fhevmProvider = walletClient?.transport ?? (isConnected ? undefined : HARDHAT_RPC_URL);
   const {
-    instance: fhevmInstance,
     status: fhevmStatus,
   } = useFhevm({
     provider: fhevmProvider,
@@ -54,9 +52,9 @@ export const DashboardPage = () => {
   const contractInfo = useMemo(() => getContractByChainId(effectiveChainId), [effectiveChainId]);
 
   const [participantCount, setParticipantCount] = useState<number>(0);
-  const [managerAddress, setManagerAddress] = useState<string | undefined>(undefined);
+  const [, setManagerAddress] = useState<string | undefined>(undefined);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
-  const [refreshToken, setRefreshToken] = useState(0);
+  const [refreshToken] = useState(0);
 
   const contractRunner = useMemo(() => {
     if (walletClient) {

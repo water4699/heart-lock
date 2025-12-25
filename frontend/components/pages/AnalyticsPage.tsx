@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { useAccount, useWalletClient } from "wagmi";
 import { motion } from "framer-motion";
-import { LineChart, GraduationCap, Award, BookOpen, ShieldCheck, Lock } from "lucide-react";
+import { GraduationCap, Award, BookOpen, ShieldCheck, Lock } from "lucide-react";
 import { useFhevm } from "@/fhevm/useFhevm";
 import { FhevmDecryptionSignature } from "@/fhevm/FhevmDecryptionSignature";
 import { GenericStringStorage } from "@/fhevm/GenericStringStorage";
@@ -70,7 +70,7 @@ export const AnalyticsPage = () => {
   const [managerAddress, setManagerAddress] = useState<string | undefined>(undefined);
   const [teamAverage, setTeamAverage] = useState<bigint | null>(null);
   const [isDecryptingAverage, setIsDecryptingAverage] = useState<boolean>(false);
-  const [refreshToken, setRefreshToken] = useState(0);
+  const [refreshToken] = useState(0);
 
   const [signer, setSigner] = useState<ethers.JsonRpcSigner | undefined>(undefined);
 
@@ -229,14 +229,7 @@ export const AnalyticsPage = () => {
   }, [hasSubmitted, participantCount, teamAverage, isDecryptingAverage, fhevmStatus, contractForAccount, fetchAverage]);
 
   // Real participation data - only what we can get from contract
-  const participationData = useMemo(() => {
-    // We only know how many have submitted, not how many are expected
-    // So we show submitted vs unknown pending
-    return [
-      { name: "Submitted", value: participantCount },
-      { name: "Unknown", value: Math.max(0, 1) }, // Placeholder, we don't know total expected
-    ];
-  }, [participantCount]);
+  // Note: We only know how many have submitted, not how many are expected
 
   const isManager = useMemo(() => {
     if (!managerAddress || !address) {

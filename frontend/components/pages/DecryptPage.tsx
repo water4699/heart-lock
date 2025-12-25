@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { useAccount, useWalletClient } from "wagmi";
 import { motion } from "framer-motion";
-import { Lock, Unlock, Eye, Award, BookOpen } from "lucide-react";
+import { Lock, Unlock, Eye, Award } from "lucide-react";
 import { useFhevm } from "@/fhevm/useFhevm";
 import { FhevmDecryptionSignature } from "@/fhevm/FhevmDecryptionSignature";
 import { GenericStringStorage } from "@/fhevm/GenericStringStorage";
@@ -35,7 +35,7 @@ function getContractByChainId(chainId: number | undefined) {
 }
 
 export const DecryptPage = () => {
-  const { address, isConnected, chainId } = useAccount();
+  const { isConnected, chainId } = useAccount();
   const { data: walletClient } = useWalletClient();
   const { storage: fhevmDecryptionSignatureStorage } = useInMemoryStorage();
 
