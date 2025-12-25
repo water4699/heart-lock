@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2022"], // get error cause (ErrorOptions)
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "target": "es2022", // get error cause (ErrorOptions)
+    "baseUrl": ".",
+    "paths": {
+      "@ethersproject/*": ["types/custom/modules/ethersproject"],
+      "ethers": ["types/custom/modules/ethers"],
+      "hardhat-deploy/types": ["types/custom/modules/hardhat-deploy-types"],
+      "hardhat-gas-reporter": ["types/custom/modules/hardhat-gas-reporter"],
+      "hardhat-gas-reporter/*": ["types/custom/modules/hardhat-gas-reporter"]
+    }
+  },
+  "exclude": ["node_modules", "test"],
+  "files": ["./hardhat.config.ts"],
+  "include": ["tasks/**/*", "deploy/**/*", "types/**/*"]
+}
