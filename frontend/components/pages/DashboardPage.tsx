@@ -6,7 +6,6 @@ import { useAccount, useWalletClient } from "wagmi";
 import { motion } from "framer-motion";
 import { GraduationCap, BookOpen, Award, ShieldCheck } from "lucide-react";
 import { useFhevm } from "@/fhevm/useFhevm";
-import { useInMemoryStorage } from "@/hooks/useInMemoryStorage";
 import { EncryptedPeerReviewABI } from "@/abi/EncryptedPeerReviewABI";
 import { EncryptedPeerReviewAddresses } from "@/abi/EncryptedPeerReviewAddresses";
 
